@@ -2995,6 +2995,7 @@ var idbModules = {  // jshint ignore:line
     'use strict';
 
     var sysdb;
+    var DEFAULT_SYSDB_SIZE = 4 * 1024 * 1024;
 
     /**
      * Craetes the sysDB to keep track of version numbers for databases
@@ -3010,7 +3011,7 @@ var idbModules = {  // jshint ignore:line
             success();
         }
         else {
-            sysdb = window.openDatabase("__sysdb__", 1, "System Database", idbModules.util.defaultDbSize);
+            sysdb = window.openDatabase("__sysdb__", 1, "System Database", DEFAULT_SYSDB_SIZE);
             sysdb.transaction(function(tx) {
                 tx.executeSql("CREATE TABLE IF NOT EXISTS dbVersions (name VARCHAR(255), version INT);", [], success, sysDbCreateError);
             }, sysDbCreateError);
@@ -3172,7 +3173,7 @@ var idbModules = {  // jshint ignore:line
                         return;
                     }
                     version = data.rows.item(0).version;
-                    var db = window.openDatabase(name, 1, name, idbModules.util.defaultDbSize);
+                    var db = window.openDatabase(name, 1, name, DEFAULT_SYSDB_SIZE);
                     db.transaction(function(tx) {
                         tx.executeSql("SELECT * FROM __sys__", [], function(tx, data) {
                             var tables = data.rows;
