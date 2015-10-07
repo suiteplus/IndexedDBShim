@@ -1,6 +1,7 @@
 var idbModules = {  // jshint ignore:line
     util: {
-        cleanInterface: false
+        cleanInterface: false ,
+        defaultDbSize : 4 * 1024 * 1024
     }
 };
 

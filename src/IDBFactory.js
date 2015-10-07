@@ -1,7 +1,6 @@
 (function(idbModules) {
     'use strict';
 
-    var DEFAULT_DB_SIZE = 4 * 1024 * 1024;
     var sysdb;
 
     /**
@@ -18,7 +17,7 @@
             success();
         }
         else {
-            sysdb = window.openDatabase("__sysdb__", 1, "System Database", DEFAULT_DB_SIZE);
+            sysdb = window.openDatabase("__sysdb__", 1, "System Database", idbModules.util.defaultDbSize);
             sysdb.transaction(function(tx) {
                 tx.executeSql("CREATE TABLE IF NOT EXISTS dbVersions (name VARCHAR(255), version INT);", [], success, sysDbCreateError);
             }, sysDbCreateError);
@@ -67,7 +66,7 @@
         }
 
         function openDB(oldVersion) {
-            var db = window.openDatabase(name, 1, name, DEFAULT_DB_SIZE);
+            var db = window.openDatabase(name, 1, name, idbModules.util.defaultDbSize);
             req.readyState = "done";
             if (typeof version === "undefined") {
                 version = oldVersion || 1;
@@ -180,7 +179,7 @@
                         return;
                     }
                     version = data.rows.item(0).version;
-                    var db = window.openDatabase(name, 1, name, DEFAULT_DB_SIZE);
+                    var db = window.openDatabase(name, 1, name, idbModules.util.defaultDbSize);
                     db.transaction(function(tx) {
                         tx.executeSql("SELECT * FROM __sys__", [], function(tx, data) {
                             var tables = data.rows;
@@ -228,7 +227,7 @@
         var encodedKey1 = idbModules.Key.encode(key1);
         var encodedKey2 = idbModules.Key.encode(key2);
         var result = encodedKey1 > encodedKey2 ? 1 : encodedKey1 === encodedKey2 ? 0 : -1;
-        
+
         if (idbModules.DEBUG) {
             // verify that the keys encoded correctly
             var decodedKey1 = idbModules.Key.decode(encodedKey1);
@@ -250,7 +249,7 @@
                 console.warn(key2 + ' was incorrectly encoded as ' + decodedKey2);
             }
         }
-        
+
         return result;
     };
 
